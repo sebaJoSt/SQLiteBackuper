@@ -8,9 +8,16 @@ namespace SQLiteBackuper
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+           
             string source = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Loggbok", "database.sqlite");
-            string destination = Path.Combine(Path.Combine(Path.GetTempPath(), "Loggbok"), "database.sqlite");
+
+            string destination_path = Path.Combine(Path.GetTempPath(), "Loggbok");
+
+            if (!Directory.Exists(destination_path))
+            {
+                Directory.CreateDirectory(destination_path);
+            }
+            string destination = Path.Combine(destination_path, "database.sqlite");
             
             string source_connect_string = $@"Data Source={source};";
             string destination_connect_string = $@"Data Source={destination};";
@@ -27,6 +34,13 @@ namespace SQLiteBackuper
             sqlite_conn2.Close();
             
             SqliteConnection.ClearPool(sqlite_conn2);
+
+            Console.WriteLine("-------------------------");
+            Console.WriteLine("Backup of");
+            Console.WriteLine(source);
+            Console.WriteLine("successfully created in");
+            Console.WriteLine(destination);
+            Console.WriteLine("-------------------------");
         }
     }
 }
